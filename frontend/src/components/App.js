@@ -1,14 +1,26 @@
-import React, { useState } from 'react';
-import IndexRouter from 'components/Router';
+import React, { useEffect, useState } from 'react';
+import IndexRouter from 'components/IndexRouter';
 import { authService } from "fbase";
 
 
 const App = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(authService.currentUser);
+  const [init,setInit] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(()=>{
+    authService.onAuthStateChanged((user)=>{
+      if(user){
+        setIsLoggedIn(true);
+      } else{
+        setIsLoggedIn(false);
+      }
+      setInit(true);
+    });
+  },[])
 
   return (
     <div>
-      <IndexRouter isLoggedIn={isLoggedIn} />
+      {init ? <IndexRouter isLoggedIn={isLoggedIn} /> : "Initializing.."}
     </div>
   );
 }
