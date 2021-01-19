@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { authService, dbService } from 'fbase';
 import { useHistory } from 'react-router';
+import Nweet from 'components/Nweet';
 
 const Home = ({ isLoggedIn, userObj }) => {
     const history = useHistory();
@@ -39,7 +40,7 @@ const Home = ({ isLoggedIn, userObj }) => {
                 id: doc.id,
                 ...doc.data()
             }));
-        setNweets(nweetArray);
+            setNweets(nweetArray);
         })
     }, [])
 
@@ -68,11 +69,11 @@ const Home = ({ isLoggedIn, userObj }) => {
                 <h1>Not LoggedIn</h1>}
             <div>
                 {nweets.map(nweet =>
-                    <div key={nweet.id}>
-                        <h4>
-                            {nweet.text}
-                        </h4>
-                    </div>
+                    <Nweet
+                        key={nweet.id}
+                        nweetObj={nweet}
+                        isOwner={nweet.creatorId === userObj.uid}
+                    />
                 )}
             </div>
         </div>
