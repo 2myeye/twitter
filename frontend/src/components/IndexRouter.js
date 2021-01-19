@@ -13,7 +13,7 @@ import {
 import Navigation from 'components/Navigation';
 
 
-const IndexRouter = ({ isLoggedIn }) => {
+const IndexRouter = ({ isLoggedIn, userObj }) => {
     return (
         <Router>
             {isLoggedIn && <Navigation />}
@@ -21,7 +21,7 @@ const IndexRouter = ({ isLoggedIn }) => {
                 {isLoggedIn ? (
                     <>
                         <Route exact path='/'>
-                            <Home isLoggedIn={isLoggedIn} />
+                            <Home isLoggedIn={isLoggedIn} userObj={userObj}/>
                         </Route>
                         <Route exact path='/profile'>
                             <Profile />
