@@ -9,7 +9,10 @@ const Home = ({ isLoggedIn, userObj }) => {
     const [nweet, setNweet] = useState('');
     //get tweets from firebase
     const [nweets, setNweets] = useState([]);
+    //file url
+    const [fileAttachment, setFileAttachment] = useState();
 
+    //submit tweet form
     const onSubmit = async (e) => {
         e.preventDefault();
         if (nweet === '') {
@@ -34,6 +37,21 @@ const Home = ({ isLoggedIn, userObj }) => {
         history.push('/');
     }
 
+    const onFileChange = (e) => {
+        const { files } = e.target;
+        const theFile = files[0];
+        const reader = new FileReader();
+        reader.onloadend = (finishedEvent) => {
+            const { result } = finishedEvent.currentTarget
+            setFileAttachment(result)
+        }
+        reader.readAsDataURL(theFile);
+    };
+
+    const onClearAttachmentClick = () =>{
+        setFileAttachment(null);
+    }
+
     useEffect(() => {
         dbService.collection('nweets').onSnapshot((snapshot) => {
             const nweetArray = snapshot.docs.map((doc) => ({
@@ -54,6 +72,21 @@ const Home = ({ isLoggedIn, userObj }) => {
                     value={nweet}
                     onChange={onChange}
                     maxLength={120} />
+                <input
+                    type='file'
+                    accept='image/*'
+                    onChange={onFileChange}
+                />
+                {fileAttachment &&
+                <div>
+                    <img
+                        src={fileAttachment}
+                        width='50px'
+                        height='50px'
+                    />
+                    <button onClick={onClearAttachmentClick}>Clear</button>
+                </div>
+                }
                 <input
                     type='submit'
                     value='ntweet'
