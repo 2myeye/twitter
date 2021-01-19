@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { authService, dbService } from 'fbase';
+import { authService, dbService, storageService } from 'fbase';
 import { useHistory } from 'react-router';
 import Nweet from 'components/Nweet';
+import {v4 as uuidv4} from 'uuid';
 
 const Home = ({ isLoggedIn, userObj }) => {
     const history = useHistory();
@@ -15,16 +16,20 @@ const Home = ({ isLoggedIn, userObj }) => {
     //submit tweet form
     const onSubmit = async (e) => {
         e.preventDefault();
-        if (nweet === '') {
-            window.alert('invalid input');
-            return false;
-        }
-        await dbService.collection('nweets').add({
-            text: nweet,
-            createdAt: Date.now(),
-            creatorId: userObj.uid,
-        });
-        setNweet('');
+        const fileRef = storageService.ref().child(`${userObj.uid}/${uuidv4()}`);
+        const response = await fileRef.putString(fileAttachment,'data_url');
+        console.log(response);
+        // if (nweet === '') {
+        //     window.alert('invalid input');
+        //     return false;
+        // }
+        // await dbService.collection('nweets').add({
+        //     text: nweet,
+        //     createdAt: Date.now(),
+        //     creatorId: userObj.uid,
+        // });
+        // setNweet('');
+
     };
 
     const onChange = (e) => {
