@@ -13,10 +13,10 @@ import {
 import Navigation from 'components/Navigation';
 
 
-const IndexRouter = ({ isLoggedIn, userObj }) => {
+const IndexRouter = ({ refreshUser, isLoggedIn, userObj }) => {
     return (
         <Router>
-            {isLoggedIn && <Navigation />}
+            {isLoggedIn && <Navigation userObj={userObj} />}
             <Switch>
                 {isLoggedIn ? (
                     <>
@@ -24,7 +24,7 @@ const IndexRouter = ({ isLoggedIn, userObj }) => {
                             <Home isLoggedIn={isLoggedIn} userObj={userObj}/>
                         </Route>
                         <Route exact path='/profile'>
-                            <Profile />
+                            <Profile userObj={userObj} refreshUser={refreshUser}/>
                         </Route>
                         <Redirect from="*" to="/" />
                     </>
