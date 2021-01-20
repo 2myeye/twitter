@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { authService, dbService } from 'fbase'
 import { useHistory } from 'react-router'
 
@@ -12,14 +12,14 @@ const Profile = ({ refreshUser, userObj }) => {
         history.push('/');
     }
 
-    const getMyNweets = async () => {
+    const getMyNweets = useCallback(async () => {
         const nweets = await dbService
             .collection('nweets')
             .where("creatorId", "==", userObj.uid)
             // .orderBy('createdAt')
             .get();
         console.log(nweets.docs.map(doc => doc.data()))
-    }
+    });
 
     const onChange = (e) => {
         const { value } = e.target;
@@ -39,7 +39,7 @@ const Profile = ({ refreshUser, userObj }) => {
 
     useEffect(() => {
         getMyNweets();
-    }, [])
+    }, [getMyNweets]);
 
     return (
         <div>

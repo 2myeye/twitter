@@ -13,15 +13,15 @@ import {
 import Navigation from 'components/Navigation';
 
 
-const IndexRouter = ({ refreshUser, isLoggedIn, userObj }) => {
+const IndexRouter = ({ refreshUser, userObj }) => {
     return (
         <Router>
-            {isLoggedIn && <Navigation userObj={userObj} />}
+            {userObj && <Navigation userObj={userObj} />}
             <Switch>
-                {isLoggedIn ? (
+                {Boolean(userObj) ? (
                     <>
                         <Route exact path='/'>
-                            <Home isLoggedIn={isLoggedIn} userObj={userObj}/>
+                            <Home isLoggedIn={Boolean(userObj)} userObj={userObj}/>
                         </Route>
                         <Route exact path='/profile'>
                             <Profile userObj={userObj} refreshUser={refreshUser}/>
