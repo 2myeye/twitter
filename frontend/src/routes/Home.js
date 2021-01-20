@@ -21,7 +21,7 @@ const Home = ({ isLoggedIn, userObj }) => {
             return false;
         }
         let attachmentURL = '';
-        if (fileAttachment != '') {
+        if (fileAttachment !== '') {
             const attachmentRef = storageService.ref().child(`${userObj.uid}/${uuidv4()}`);
             const response = await attachmentRef.putString(fileAttachment, 'data_url');
             attachmentURL = await attachmentRef.getDownloadURL();
@@ -93,6 +93,7 @@ const Home = ({ isLoggedIn, userObj }) => {
                             src={fileAttachment}
                             width='50px'
                             height='50px'
+                            alt=''
                         />
                         <button onClick={onClearAttachmentClick}>Clear</button>
                     </div>
