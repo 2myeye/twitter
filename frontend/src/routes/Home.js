@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { authService, dbService, storageService } from 'fbase';
 import { useHistory } from 'react-router';
 import Nweet from 'components/Nweet';
-import {v4 as uuidv4} from 'uuid';
+import { v4 as uuidv4 } from 'uuid';
 
 const Home = ({ isLoggedIn, userObj }) => {
     const history = useHistory();
@@ -11,25 +11,30 @@ const Home = ({ isLoggedIn, userObj }) => {
     //get tweets from firebase
     const [nweets, setNweets] = useState([]);
     //file url
-    const [fileAttachment, setFileAttachment] = useState();
+    const [fileAttachment, setFileAttachment] = useState('');
 
     //submit tweet form
     const onSubmit = async (e) => {
         e.preventDefault();
-        const fileRef = storageService.ref().child(`${userObj.uid}/${uuidv4()}`);
-        const response = await fileRef.putString(fileAttachment,'data_url');
-        console.log(response);
-        // if (nweet === '') {
-        //     window.alert('invalid input');
-        //     return false;
-        // }
-        // await dbService.collection('nweets').add({
-        //     text: nweet,
-        //     createdAt: Date.now(),
-        //     creatorId: userObj.uid,
-        // });
-        // setNweet('');
-
+        if (nweet === '') {
+            window.alert('invalid input');
+            return false;
+        }
+        let attachmentURL = '';
+        if (fileAttachment != '') {
+            const attachmentRef = storageService.ref().child(`${userObj.uid}/${uuidv4()}`);
+            const response = await attachmentRef.putString(fileAttachment, 'data_url');
+            attachmentURL = await attachmentRef.getDownloadURL();
+        }
+        const nweetObj = {
+            text: nweet,
+            createdAt: Date.now(),
+            creatorId: userObj.uid,
+            attachmentURL
+        }
+        await dbService.collection('nweets').add(nweetObj);
+        setNweet('');
+        setFileAttachment('');
     };
 
     const onChange = (e) => {
@@ -53,8 +58,8 @@ const Home = ({ isLoggedIn, userObj }) => {
         reader.readAsDataURL(theFile);
     };
 
-    const onClearAttachmentClick = () =>{
-        setFileAttachment(null);
+    const onClearAttachmentClick = () => {
+        setFileAttachment('');
     }
 
     useEffect(() => {
@@ -83,14 +88,14 @@ const Home = ({ isLoggedIn, userObj }) => {
                     onChange={onFileChange}
                 />
                 {fileAttachment &&
-                <div>
-                    <img
-                        src={fileAttachment}
-                        width='50px'
-                        height='50px'
-                    />
-                    <button onClick={onClearAttachmentClick}>Clear</button>
-                </div>
+                    <div>
+                        <img
+                            src={fileAttachment}
+                            width='50px'
+                            height='50px'
+                        />
+                        <button onClick={onClearAttachmentClick}>Clear</button>
+                    </div>
                 }
                 <input
                     type='submit'
