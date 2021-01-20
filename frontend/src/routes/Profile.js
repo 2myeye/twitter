@@ -1,5 +1,5 @@
-import React, { useCallback, useEffect, useState } from 'react'
-import { authService, dbService } from 'fbase'
+import React, { useState } from 'react'
+import { authService } from 'fbase'
 import { useHistory } from 'react-router'
 
 const Profile = ({ refreshUser, userObj }) => {
@@ -12,14 +12,6 @@ const Profile = ({ refreshUser, userObj }) => {
         history.push('/');
     }
 
-    const getMyNweets = useCallback(async () => {
-        const nweets = await dbService
-            .collection('nweets')
-            .where("creatorId", "==", userObj.uid)
-            // .orderBy('createdAt')
-            .get();
-        console.log(nweets.docs.map(doc => doc.data()))
-    });
 
     const onChange = (e) => {
         const { value } = e.target;
@@ -37,32 +29,31 @@ const Profile = ({ refreshUser, userObj }) => {
         }
     }
 
-    useEffect(() => {
-        getMyNweets();
-    }, [getMyNweets]);
-
     return (
-        <div>
-            <form onSubmit={onSubmit}>
+        <div className="container">
+            <form onSubmit={onSubmit} className="profileForm">
                 <input
                     type='text'
                     placeholder='Display name'
                     value={newDisplayName}
+                    autoFocus
+                    className='formInput'
                     onChange={onChange}
                 />
                 <input
-                    type='submit'
-                    value='Update profile'
+                    type="submit"
+                    value="Update Profile"
+                    className="formBtn"
+                    style={{
+                        marginTop: 10,
+                    }}
                 />
             </form>
-            <div>Profile</div>
-            <input
-                type="button"
-                value="LogOut"
-                onClick={onLogOutClick}
-            />
+            <span className="formBtn cancelBtn logOut" onClick={onLogOutClick}>
+                Log Out
+            </span>
         </div>
-    )
-}
+    );
+};
 
 export default Profile;

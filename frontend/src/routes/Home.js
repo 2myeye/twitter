@@ -25,18 +25,9 @@ const Home = ({ isLoggedIn, userObj }) => {
     }, [])
 
     return (
-        <div>
-            <h2>Home</h2>
+        <div className="container">
             <NweetFactory userObj={userObj}/>
-            {isLoggedIn ?
-                <input
-                    type="button"
-                    value="LogOut"
-                    onClick={onLogOutClick}
-                />
-                :
-                <h1>Not LoggedIn</h1>}
-            <div>
+            <div style={{ marginTop: 30 }}>
                 {nweets.map(nweet =>
                     <Nweet
                         key={nweet.id}

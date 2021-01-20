@@ -45,7 +45,7 @@ const AuthForm = () => {
 
     return (
         <div>
-            <form onSubmit={onSubmit}>
+            <form onSubmit={onSubmit} className='container'>
                 <input
                     name="email"
                     type="email"
@@ -53,6 +53,7 @@ const AuthForm = () => {
                     required
                     value={email}
                     onChange={onChange}
+                    className='authInput'
                 />
                 <input
                     name="password"
@@ -61,15 +62,17 @@ const AuthForm = () => {
                     required
                     value={password}
                     onChange={onChange}
+                    className='authInput'
                 />
                 <input
                     type="submit"
                     value={newAccount ? "Create Account" : "LogIn"}
                     onKeyPress={onKeyPress}
+                    className='authInput authSubmit'
                 />
-                {errorMSG}
+                {errorMSG && <span className='authError'>{errorMSG}</span>}
             </form>
-            <span onClick={toggleAccount}>{newAccount ? "Sign In" : "Create Account"}</span>
+            <span onClick={toggleAccount} className='authSwitch'>{newAccount ? "Sign In" : "Create Account"}</span>
         </div>
     )
 }

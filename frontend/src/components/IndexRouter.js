@@ -13,21 +13,30 @@ import {
 import Navigation from 'components/Navigation';
 
 
-const IndexRouter = ({ refreshUser, userObj }) => {
+const IndexRouter = ({ refreshUser, isLoggedIn, userObj }) => {
     return (
         <Router>
-            {userObj && <Navigation userObj={userObj} />}
+            {isLoggedIn && <Navigation userObj={userObj} />}
             <Switch>
-                {Boolean(userObj) ? (
-                    <>
+                <>
+                {isLoggedIn ? (
+                    <div
+                        style={{
+                            maxWidth: 890,
+                            width: "100%",
+                            margin: "0 auto",
+                            marginTop: 80,
+                            display: "flex",
+                            justifyContent: "center",
+                        }}
+                    >
                         <Route exact path='/'>
-                            <Home isLoggedIn={Boolean(userObj)} userObj={userObj}/>
+                            <Home userObj={userObj} />
                         </Route>
                         <Route exact path='/profile'>
-                            <Profile userObj={userObj} refreshUser={refreshUser}/>
+                            <Profile userObj={userObj} refreshUser={refreshUser} />
                         </Route>
-                        <Redirect from="*" to="/" />
-                    </>
+                        </div>
                 ) : (
                         <>
                             <Route exact path='/'>
@@ -36,6 +45,7 @@ const IndexRouter = ({ refreshUser, userObj }) => {
                             <Redirect from="*" to="/" />
                         </>
                     )}
+                    </>
             </Switch>
         </Router>
     )

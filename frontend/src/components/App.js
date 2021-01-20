@@ -33,7 +33,11 @@ const App = () => {
 
   return (
     <div>
-      {init ? <IndexRouter refreshUser={refreshUser} userObj={userObj} /> : "Initializing.."}
+      {init ?
+        <IndexRouter
+          refreshUser={refreshUser}
+          isLoggedIn={Boolean(userObj)}
+          userObj={userObj} /> : "Initializing.."}
     </div>
   );
 }
